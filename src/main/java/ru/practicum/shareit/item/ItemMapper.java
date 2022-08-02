@@ -34,7 +34,7 @@ public class ItemMapper {
         );
     }
 
-    public static Item fromItemUpdDto(ItemUpdateDto itemDto){
+    public static Item fromItemUpdDto(ItemUpdateDto itemDto) {
         return new Item(
                 itemDto.getName(),
                 itemDto.getDescription(),

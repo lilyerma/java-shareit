@@ -30,7 +30,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item update(Item item) {
         Item existItem = itemStorage.getItemById(item.getId());
-        if (existItem.getOwner() != item.getOwner()) {
+        if (!existItem.getOwner().equals(item.getOwner())) {
             throw new NotFoundException("Вещь у этого пользователя не найдена");
         }
         if (item.getName() != null) {
@@ -56,7 +56,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItemById(long id){
+    public Item getItemById(long id) {
         return itemStorage.getItemById(id);
     }
 
