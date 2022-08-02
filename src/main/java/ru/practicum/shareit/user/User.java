@@ -19,6 +19,7 @@ public class User {
     @NotNull(message = "Не должно быть null")
     @NotBlank(message = "Не должно быть пустым")
     String email;
+
     public User(Long userId, String name, String email) {
         this.name = name;
         this.email = email;

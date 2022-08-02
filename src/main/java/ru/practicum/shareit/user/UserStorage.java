@@ -1,11 +1,10 @@
 package ru.practicum.shareit.user;
 
-import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
 
 public interface UserStorage {
- //   User create(User user) throws RuntimeException; // Метод создающий/Добавляющий пользователя в хранилище
+
 
     // Метод по созданию/добавлению нового пользователя
     User create(User user);

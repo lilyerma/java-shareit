@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import java.util.Objects;
 
 @Component
 public class UserMapper {

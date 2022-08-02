@@ -4,13 +4,9 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserStorage;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -53,6 +49,7 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> getUserItems(long id) {
        return itemStorage.getUserItems(id);
     }
+
     @Override
     public List<Item> searchNameAndDesc(String text) {
         return  itemStorage.search(text);
@@ -62,7 +59,5 @@ public class ItemServiceImpl implements ItemService {
     public Item getItemById(long id){
         return itemStorage.getItemById(id);
     }
-
-
 
 }

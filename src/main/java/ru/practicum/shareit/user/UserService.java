@@ -1,10 +1,8 @@
 package ru.practicum.shareit.user;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Getter
@@ -18,7 +16,7 @@ private final UserStorage userStorage;
         this.userStorage = userStorage;
     }
 
-    public void checkId(Long id){
+    public void checkId(Long id) {
         userStorage.getUserById(id);
     }
 }

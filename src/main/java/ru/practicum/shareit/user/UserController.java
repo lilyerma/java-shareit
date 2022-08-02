@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -9,7 +8,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * // TODO .
@@ -20,6 +18,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+
     @Autowired
     public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
@@ -31,7 +30,7 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody UserDto userDto) throws RuntimeException {
         System.out.println("Создаем пользователя");
-        if (userDto.getEmail()==null){
+        if (userDto.getEmail() == null) {
             throw new ValidationException("нельзя чтобы был пустой email");
         }
         User user = userMapper.fromUserDto(userDto);
@@ -41,7 +40,7 @@ public class UserController {
     // Метод, который обновляет информацию по существующему пользователю или создает и добавляет нового пользователя
     @PatchMapping ("/{id}")
     public User update(@PathVariable long id, @Valid @RequestBody UserDto userDto) throws RuntimeException {
-        if (userService.getUserStorage().getUserById(id)==null){
+        if (userService.getUserStorage().getUserById(id) == null) {
             throw new NotFoundException("Пользователь с таким Id не найден");
         }
         User user = userMapper.fromUserDto(userDto);

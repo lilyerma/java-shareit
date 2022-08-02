@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
+
 
 public class ItemMapper {
 
@@ -17,7 +17,7 @@ public class ItemMapper {
         );
     }
 
-    public static Item fromItemDto(ItemDto itemDto){
+    public static Item fromItemDto(ItemDto itemDto) {
         return new Item(
                 itemDto.getName(),
                 itemDto.getDescription(),

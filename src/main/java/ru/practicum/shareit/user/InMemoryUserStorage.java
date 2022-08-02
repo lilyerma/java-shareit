@@ -23,13 +23,13 @@ public class InMemoryUserStorage implements UserStorage {
     // Метод по созданию/добавлению нового пользователя
     @Override
     public User create(User user) {
-        if (getUserByEmail(user.getEmail())!=-1){
+        if (getUserByEmail(user.getEmail()) != -1) {
             log.debug("Найден пользователь с таким email");
             throw new ConflictException("Такой пользователь уже есть");
         }
         log.debug("Устанавливаем автоматически ID для пользователя");
         user.setId(id + 1);
-        id+=1;
+        id += 1;
 
         try {
             if (user.getName().isEmpty()) {
@@ -52,19 +52,19 @@ public class InMemoryUserStorage implements UserStorage {
             log.debug("При обновлении пользователя передали значение Null");
             throw new ValidationException("Ошибка валидации");
         }
-        if (getUserByEmail(user.email)!=-1){
+        if (getUserByEmail(user.email) != -1) {
             throw new ConflictException("Пользователь с таким email уже есть");
         }
-        if (mapWithAllUsers.get(user.getId())==null) {
+        if (mapWithAllUsers.get(user.getId()) == null) {
             log.debug("При обновлении пользователя объект с ID - " + user.getId() + " не был найден");
             throw new NotFoundException("Искомый объект не найден");
         } else {
             try {
                 User userExist = mapWithAllUsers.get(user.getId());
                 log.debug("Обновляем информацию по пользователю через ID");
-                if (user.getName()==null){
+                if (user.getName() == null) {
                     user.setName(userExist.getName());
-                } else if (user.getEmail()==null) {
+                } else if (user.getEmail() == null) {
                     user.setEmail(userExist.email);
                 }
                 mapWithAllUsers.put(user.getId(), user);
@@ -113,7 +113,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public long getUserByEmail(String email) {
         for (long id : mapWithAllUsers.keySet()) {
-            if (mapWithAllUsers.get(id).getEmail().equals(email)){
+            if (mapWithAllUsers.get(id).getEmail().equals(email)) {
                 try {
                     log.debug("Пытаюсь вернуть id пользователя");
                     return id;

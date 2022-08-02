@@ -68,7 +68,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<Item> searchNameAndDesc (@RequestParam String text) throws RuntimeException {
+    public List<Item> searchNameAndDesc(@RequestParam String text) throws RuntimeException {
         return itemService.searchNameAndDesc(text);
     }
 
