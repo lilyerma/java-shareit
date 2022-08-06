@@ -6,13 +6,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-/**
- * // TODO .
- */
+
 @Data
 public class User {
 
-    Long id;
+    long id;
     @NotNull
     String name;
     @Email

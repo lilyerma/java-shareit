@@ -21,4 +21,5 @@ public interface ItemStorage {
 
     Item getItemById(long id) throws RuntimeException; // Метод возвращающий объект по ID
 
+    void deleteByOwner(long id);
 }

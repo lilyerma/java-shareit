@@ -7,9 +7,6 @@ import ru.practicum.shareit.requests.ItemRequest;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 
-/**
- * // TODO .
- */
 @Data
 public class Item {
 

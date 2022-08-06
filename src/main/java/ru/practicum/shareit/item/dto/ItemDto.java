@@ -6,10 +6,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
-/**
- * // TODO .
- */
-
 @Data
 public class ItemDto {
 

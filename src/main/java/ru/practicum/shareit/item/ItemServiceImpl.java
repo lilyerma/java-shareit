@@ -4,9 +4,14 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserStorage;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -14,23 +19,30 @@ public class ItemServiceImpl implements ItemService {
 
     private final UserStorage userStorage;
     private final ItemStorage itemStorage;
-    private final ItemMapper itemMapper = new ItemMapper();
+    private final ItemMapper itemMapper;
 
     @Autowired
-    public ItemServiceImpl(UserStorage userStorage, ItemStorage itemStorage) {
+    public ItemServiceImpl(UserStorage userStorage, ItemStorage itemStorage, ItemMapper itemMapper) {
         this.userStorage = userStorage;
         this.itemStorage = itemStorage;
+        this.itemMapper = itemMapper;
     }
 
     @Override
-    public Item create(Item item) {
-        return itemStorage.create(item);
+    public ItemDto create(ItemDto itemDto, long ownerId) {
+        System.out.println("Создаем объект");
+        Item item = ItemMapper.fromItemDto(itemDto);
+        item.setOwner(ownerId);
+        Item itemToReturn = itemStorage.create(item);
+        return ItemMapper.toItemDto(itemToReturn);
     }
 
     @Override
-    public Item update(Item item) {
-        Item existItem = itemStorage.getItemById(item.getId());
-        if (!existItem.getOwner().equals(item.getOwner())) {
+    public ItemDto update(ItemUpdateDto itemDto, long id, long ownerId) {
+        System.out.println("Обновляем объект");
+        Item item = ItemMapper.fromItemUpdDto(itemDto);
+        Item existItem = itemStorage.getItemById(id);
+        if (!existItem.getOwner().equals(ownerId)) {
             throw new NotFoundException("Вещь у этого пользователя не найдена");
         }
         if (item.getName() != null) {
@@ -42,22 +54,44 @@ public class ItemServiceImpl implements ItemService {
         if (item.getAvailable() != null) {
             existItem.setAvailable(item.getAvailable());
         }
-        return itemStorage.update(existItem);
+        Item itemToReturn = itemStorage.update(existItem);
+        return ItemMapper.toItemDto(itemToReturn);
     }
 
     @Override
-    public List<Item> getUserItems(long id) {
-       return itemStorage.getUserItems(id);
+    public void delete(long id, long ownerId) {
+        Item existItem = itemStorage.getItemById(id);
+        if (!existItem.getOwner().equals(ownerId)) {
+            throw new NotFoundException("Вещь у этого пользователя не найдена");
+        }
+        itemStorage.delete(id);
     }
 
     @Override
-    public List<Item> searchNameAndDesc(String text) {
-        return  itemStorage.search(text);
+    public void deleteByOwner(long ownerId) {
+        itemStorage.deleteByOwner(ownerId);
     }
 
     @Override
-    public Item getItemById(long id) {
-        return itemStorage.getItemById(id);
+    public List<ItemDto> getUserItems(long id) {
+        return  itemStorage.getUserItems(id)
+                .stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemDto> searchNameAndDesc(String text) {
+        return  itemStorage.search(text)
+                .stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ItemDto getItemById(long id) {
+        Item item = itemStorage.getItemById(id);
+        return ItemMapper.toItemDto(item);
     }
 
 }

@@ -1,22 +1,21 @@
 package ru.practicum.shareit.user;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import ru.practicum.shareit.user.dto.UserDto;
 
-@Getter
-@Slf4j
-@Service
-public class UserService {
-private final UserStorage userStorage;
+import java.util.List;
 
-    @Autowired
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
+public interface UserService {
+    UserDto create(UserDto userDto);
 
-    public void checkId(Long id) {
-        userStorage.getUserById(id);
-    }
+    void checkId(Long id);
+
+    UserDto update(UserDto userDto, long id);
+
+    void delete(long id);
+
+    List<UserDto> getUsers();
+
+    UserStorage getUserStorage();
+
+    UserMapper getUserMapper();
 }

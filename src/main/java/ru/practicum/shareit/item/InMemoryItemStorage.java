@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -62,14 +63,26 @@ public class InMemoryItemStorage implements ItemStorage {
         }
     }
 
+    public void deleteByOwner(long ownerId) throws RuntimeException {
+        try {
+            log.debug("Пытаемся удалить объекты пользователя");
+
+            for (Item item : getUserItems(id)){
+                mapOfAllItems.remove(item.getId());
+            }
+        } catch (RuntimeException e) {
+            log.debug("При удалении объетка возникла внутренняя ошибка сервера");
+            throw new RuntimeException("Внутреняя ошибка сервера");
+        }
+    }
+
     @Override
     public List<Item> getUserItems(long id) throws RuntimeException {
         try {
             log.debug("Пытаемся вернуть список всех объектов пользователя");
-            ArrayList<Item> userItems = (ArrayList<Item>) mapOfAllItems.values().stream()
+            return  mapOfAllItems.values().stream()
                     .filter(Item -> Item.getOwner() == id)
                     .collect(Collectors.toList());
-            return userItems;
         } catch (RuntimeException exception) {
             log.debug("При попытке вернуть список  объектов возникла внутренняя ошибка сервера");
             throw new RuntimeException("Внутреняя ошибка сервера");
@@ -82,12 +95,11 @@ public class InMemoryItemStorage implements ItemStorage {
             return new ArrayList<>();
         }
         String caps = text.toUpperCase();
-        ArrayList<Item> searchResult = (ArrayList<Item>) mapOfAllItems.values().stream()
+        return  mapOfAllItems.values().stream()
                 .filter(Item -> Item.getName().toUpperCase().contains(caps) ||
                         Item.getDescription().toUpperCase().contains(caps))
                 .filter(Item -> Item.getAvailable() == Boolean.TRUE)
                 .collect(Collectors.toList());
-        return searchResult;
     }
 
     @Override

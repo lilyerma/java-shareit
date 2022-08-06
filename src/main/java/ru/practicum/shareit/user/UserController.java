@@ -2,62 +2,50 @@ package ru.practicum.shareit.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * // TODO .
- */
+
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
+    private final ItemService itemService;
 
     @Autowired
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService, ItemService itemService) {
         this.userService = userService;
-        this.userMapper = userMapper;
+        this.itemService = itemService;
     }
 
 
     // Метод, который добавляет нового пользователя
     @PostMapping
-    public User create(@Valid @RequestBody UserDto userDto) throws RuntimeException {
-        System.out.println("Создаем пользователя");
-        if (userDto.getEmail() == null) {
-            throw new ValidationException("нельзя чтобы был пустой email");
-        }
-        User user = userMapper.fromUserDto(userDto);
-        return userService.getUserStorage().create(user);
+    public UserDto create(@Valid @RequestBody UserDto userDto) throws RuntimeException {
+        return userService.create(userDto);
     }
 
     // Метод, который обновляет информацию по существующему пользователю или создает и добавляет нового пользователя
     @PatchMapping ("/{id}")
-    public User update(@PathVariable long id, @Valid @RequestBody UserDto userDto) throws RuntimeException {
-        if (userService.getUserStorage().getUserById(id) == null) {
-            throw new NotFoundException("Пользователь с таким Id не найден");
-        }
-        User user = userMapper.fromUserDto(userDto);
-        user.setId(id);
-        return userService.getUserStorage().update(user);
+    public UserDto update(@PathVariable long id, @Valid @RequestBody UserDto userDto) throws RuntimeException {
+        return userService.update(userDto, id);
     }
 
     // Метод удаляющий пользователя
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) throws RuntimeException {
-        userService.getUserStorage().delete(id);
+        userService.delete(id);
+        itemService.deleteByOwner(id);
     }
 
     // Метод по получению всех пользователей
     @GetMapping
-    public List<User> getAll() throws RuntimeException {
-        return userService.getUserStorage().getUsers();
+    public List<UserDto> getUsers() throws RuntimeException {
+        return userService.getUsers();
     }
 
     // Метод по получению одного пользователя (переменная пути)
