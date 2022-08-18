@@ -103,7 +103,7 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public Item getItemById(long id) throws RuntimeException {
+    public Item getById(long id) throws RuntimeException {
         if (id < 0) {
             log.debug("При попытке вернуть объект возникла ошибка с ID");
             throw new NotFoundException("Искомый объект не найден");

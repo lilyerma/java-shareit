@@ -16,10 +16,9 @@ public interface ItemStorage {
 
     List<Item> getUserItems(long id) throws RuntimeException; // Метод по возвращению все объекты
 
-
     List<Item> search(String text);
 
-    Item getItemById(long id) throws RuntimeException; // Метод возвращающий объект по ID
+    Item getById(long id) throws RuntimeException; // Метод возвращающий объект по ID
 
     void deleteByOwner(long id);
 }

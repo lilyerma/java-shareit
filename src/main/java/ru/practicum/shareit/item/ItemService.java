@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Item;
@@ -14,12 +15,24 @@ public interface ItemService {
 
     void delete(long id, long ownerId);
 
+    long getOwnerByItemId(long itemId);
+
     void deleteByOwner(long ownerId);
 
     List<ItemDto> getUserItems(long id);
+
+    boolean checkAvailable(long itemId);
+
+    ItemDto addBookingDates(ItemDto itemDto);
 
     List<ItemDto> searchNameAndDesc(String text);
 
     ItemDto getItemById(long id);
 
+    Boolean checkOwnership(long ownerId, long itemId);
+
+    ItemDto getItemByIdWithBookings(long id);
+
+    //Метод для создания комментария
+    CommentDto createComment(long itemId, long author, CommentDto commentDto);
 }

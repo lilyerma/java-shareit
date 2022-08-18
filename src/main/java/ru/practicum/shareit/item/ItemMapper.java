@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Item;
@@ -14,12 +15,22 @@ public class ItemMapper {
         ItemDto itemDto = new ItemDto(
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable(),
-                item.getRequest() != null ? item.getRequest().getId() : null
+                item.getAvailable()
+                //    item.getRequest() //!= null ? item.getRequest().getId() : null
         );
         itemDto.setId(item.getId());
         return itemDto;
     }
+    public static ItemDto toItemDto(Item item, BookingDto last, BookingDto next) {
+        ItemDto itemDto = new ItemDto(
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable()
+        );
+        itemDto.setId(item.getId());
+        return itemDto;
+    }
+
 
     public static Item fromItemDto(ItemDto itemDto) {
         return new Item(
@@ -34,7 +45,7 @@ public class ItemMapper {
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                item.getRequest() != null ? item.getRequest().getId() : null
+                item.getRequest() //!= null ? item.getRequest().getId() : null
         );
         itemUpdateDto.setId(item.getId());
         return itemUpdateDto;

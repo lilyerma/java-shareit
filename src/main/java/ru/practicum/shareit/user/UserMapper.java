@@ -38,5 +38,4 @@ public class UserMapper {
         return userStorage.getUserByEmail(email);
     }
 
-
 }
