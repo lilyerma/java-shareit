@@ -15,7 +15,9 @@ public interface UserService {
 
     List<UserDto> getUsers();
 
-    UserStorage getUserStorage();
+    UserDto getUserById(long id);
+
+  //  UserStorage getUserStorage();
 
     UserMapper getUserMapper();
 }

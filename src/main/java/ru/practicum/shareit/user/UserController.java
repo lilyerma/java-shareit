@@ -50,8 +50,8 @@ public class UserController {
 
     // Метод по получению одного пользователя (переменная пути)
     @GetMapping("/{id}")
-    public User getOne(@PathVariable long id) throws RuntimeException {
-        return userService.getUserStorage().getUserById(id);
+    public UserDto getOne(@PathVariable long id) throws RuntimeException {
+        return userService.getUserById(id);
     }
 
 

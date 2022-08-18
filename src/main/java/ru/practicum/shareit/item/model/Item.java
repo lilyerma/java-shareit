@@ -1,28 +1,33 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.Data;
-import ru.practicum.shareit.requests.ItemRequest;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+import javax.persistence.*;
 
-import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-
-@Data
+@Entity
+@Table(name = "items", schema = "public")
+@Getter
+@Setter
+@ToString
 public class Item {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    @NotNull
+    @Column(nullable = false)
     String name;
-    @NotNull
+    @Column(nullable = false)
     String description;
-    @NotNull
+    @Column(name = "is_available", nullable = false)
     Boolean available;
-    @NotNull
-    Long owner;
-    ItemRequest request;
+    @Column(name = "owner_id",nullable = false)
+    long owner;
 
-    HashMap<Long,String> comments;
+    @Column(name = "request_id")
+    long request;
 
     public Item() {
     }
