@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto create(ItemDto itemDto, long ownerId) {
-        System.out.println("Создаем объект");
+        checkUserExists(ownerId);
         Item item = ItemMapper.fromItemDto(itemDto);
         item.setOwner(ownerId);
         Item itemToReturn = itemRepository.save(item);
@@ -57,11 +57,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public ItemDto update(ItemUpdateDto itemDto, long id, long ownerId) {
-        System.out.println("Обновляем объект");
+    public ItemDto update(ItemUpdateDto itemDto, long itemId, long ownerId) {
+        checkUserExists(ownerId);
         Item item = ItemMapper.fromItemUpdDto(itemDto);
         try {
-            Item existItem = itemRepository.getReferenceById(id);
+            Item existItem = itemRepository.getReferenceById(itemId);
             if (existItem.getOwner() != ownerId) {
                 throw new NotFoundException("Вещь у этого пользователя не найдена");
             }
@@ -83,6 +83,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void delete(long id, long ownerId) {
+        checkUserExists(ownerId);
         Item existItem = itemRepository.getReferenceById(id);
         if (existItem.getOwner() != ownerId) {
             throw new NotFoundException("Вещь у этого пользователя не найдена");
@@ -116,7 +117,7 @@ public class ItemServiceImpl implements ItemService {
         if (itemRepository.findById(itemId).isEmpty()) {
             throw new NotFoundException("не найден такой предмет");
         }
-        if (!getItemById(itemId).getAvailable()) {
+        if (!itemRepository.getReferenceById(itemId).getAvailable()) {
             throw new ValidationException("Объект недоступен для бронирования");
         }
         return false;
@@ -161,16 +162,24 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
-    // Метод для получения одного предмета
+    // Метод для получения одного предмета для владельца и для пользователя
     @Override
-    public ItemDto getItemById(long id) {
-        if (itemRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("нет предмета с таким id");
+    public ItemDto getItemByIdForOwnerOrForUser(long id, long ownerId) {
+        if (checkOwnership(id, ownerId)) {
+            return getItemByIdWithBookings(id); // Возвращает владельцу с данными о бронировании
         }
-        Item item = itemRepository.getReferenceById(id);
-        ItemDto itemDto = ItemMapper.toItemDto(item);
-        addComments(id, itemDto);
-        return itemDto;
+        ItemDto forUsers = getItemById(id);
+        addComments(id, forUsers);
+        return forUsers;
+    }
+
+    @Override
+    public ItemDto getItemById(long itemId) {
+        if (itemRepository.findById(itemId).isEmpty()) {
+            throw new NotFoundException("объект не найден");
+        }
+        Item item = itemRepository.getReferenceById(itemId);
+        return ItemMapper.toItemDto(item);
     }
 
     //Добавляем комментарии в DTO объекта и имя пользователя
@@ -219,4 +228,13 @@ public class ItemServiceImpl implements ItemService {
             throw new ValidationException("Не найдены согласованные бронирования в прошлом");
         }
     }
+
+    // Проверка, что пользователь существует
+    private void checkUserExists(long userId){
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException("Не найден пользователь");
+        }
+    }
+
+
 }

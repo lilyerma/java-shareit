@@ -1,8 +1,7 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
@@ -11,17 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-    private final ItemService itemService;
-
-    @Autowired
-    public UserController(UserService userService, ItemService itemService) {
-        this.userService = userService;
-        this.itemService = itemService;
-    }
-
 
     // Метод, который добавляет нового пользователя
     @PostMapping
@@ -39,7 +31,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) throws RuntimeException {
         userService.delete(id);
-        itemService.deleteByOwner(id);
     }
 
     // Метод по получению всех пользователей

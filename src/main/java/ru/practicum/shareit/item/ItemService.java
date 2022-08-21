@@ -27,9 +27,12 @@ public interface ItemService {
 
     List<ItemDto> searchNameAndDesc(String text);
 
-    ItemDto getItemById(long id);
-
     Boolean checkOwnership(long ownerId, long itemId);
+
+    // Метод для получения одного предмета
+    ItemDto getItemByIdForOwnerOrForUser(long id, long ownerId);
+
+    ItemDto getItemById(long itemId);
 
     ItemDto getItemByIdWithBookings(long id);
 

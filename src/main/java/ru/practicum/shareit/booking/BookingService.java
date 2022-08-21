@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface BookingService {
 
+    void checkNotOwnerAndAvailable(BookingDto bookingDto, long requestorId);
+
     BookingDtoNames create(BookingDto bookingDto, long requestorId);
 
     BookingDtoNames updateStatus(long bookingId, boolean approval, long owner);
@@ -20,4 +22,7 @@ public interface BookingService {
 
     List<BookingDtoNames> getForOwnerByState(long ownerId, State state);
 
+    List<BookingDtoNames> checkInputStateAndGetForOwnerByState(String stateStr, long ownerId);
+
+    List<BookingDtoNames> checkInputStateAndGetForBookingUserByState(String stateStr, long ownerId);
 }

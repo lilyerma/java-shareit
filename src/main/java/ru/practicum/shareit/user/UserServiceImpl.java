@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto create(UserDto userDto) {
-        System.out.println("Создаем пользователя");
         if (userDto.getEmail() == null) {
             throw new ValidationException("нельзя чтобы был пустой email");
         }
@@ -35,15 +34,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void checkId(Long id) {
-        if (userRepository.getUserById(id)==null){
+        if (userRepository.findById(id).isEmpty()){
             throw new NotFoundException("нет пользователя");
-        };
+        }
     }
 
     @Transactional
     @Override
     public UserDto update(UserDto userDto, long id) {
-        if (userRepository.getReferenceById(id) == null) {
+        if (userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Пользователь с таким Id не найден");
         }
         User existUser = userRepository.getReferenceById(id);
