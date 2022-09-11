@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.item.dto.ItemDtoShort;
+import ru.practicum.shareit.user.dto.BookerDto;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class BookingDto {
+public class BookingDtoNames {
 
     private long id;
     @NotNull
@@ -21,17 +23,13 @@ public class BookingDto {
     @NotNull
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime end;
-    @NotNull
-    private Long itemId;
+    private ItemDtoShort item;
+    private BookerDto booker;
     private Status status;
-    private long bookerId;
 
-
-    public BookingDto(long id, LocalDateTime start, LocalDateTime end, long bookerId) {
-        this.id = id;
+    public BookingDtoNames(LocalDateTime start, LocalDateTime end) {
         this.start = start;
         this.end = end;
-        this.bookerId = bookerId;
     }
 
 }
