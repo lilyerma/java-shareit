@@ -19,15 +19,16 @@ public interface ItemService {
 
     void deleteByOwner(long ownerId);
 
-    List<ItemDto> getUserItems(long id);
+    List<ItemDto> getUserItems(long id, int from, int size);
 
     boolean checkAvailable(long itemId);
 
     ItemDto addBookingDates(ItemDto itemDto);
 
-    List<ItemDto> searchNameAndDesc(String text);
-
     Boolean checkOwnership(long ownerId, long itemId);
+
+    //Ищем по имени и описанию
+    List<ItemDto> searchNameAndDesc(String text, int from, int size);
 
     // Метод для получения одного предмета
     ItemDto getItemByIdForOwnerOrForUser(long id, long ownerId);

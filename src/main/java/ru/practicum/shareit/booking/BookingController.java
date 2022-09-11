@@ -1,17 +1,20 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoNames;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
+@Validated
 public class BookingController {
 
     private final BookingService bookingService;
@@ -33,9 +36,11 @@ public class BookingController {
     // Владелец получает по бронированиям на свои объекты и по состоянию
     @GetMapping("/owner")
     public List<BookingDtoNames> getUserItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                                              @RequestParam(name = "state", defaultValue = "ALL") String stateStr)
+                                              @RequestParam(name = "state", defaultValue = "ALL") String stateStr,
+                                              @Valid @RequestParam(name = "from", defaultValue = "0") @Min(0) int from,
+                                              @Valid @RequestParam(name = "size", defaultValue = "10") @Min(1) int size)
             throws RuntimeException {
-        return bookingService.checkInputStateAndGetForOwnerByState(stateStr, ownerId);
+        return bookingService.checkInputStateAndGetForOwnerByState(stateStr, ownerId, from, size);
     }
 
     // Метод по получению одного объекта
@@ -49,7 +54,9 @@ public class BookingController {
     @GetMapping
     public List<BookingDtoNames> getBookingsByUser(@RequestHeader("X-Sharer-User-Id") Long user,
                                                    @RequestParam(name = "state", defaultValue = "ALL")
-                                                   String stateStr) throws RuntimeException {
-        return bookingService.checkInputStateAndGetForBookingUserByState(stateStr, user);
+                                                   String stateStr,
+                                                   @RequestParam(name = "from", defaultValue = "0") @Min(0) int from,
+                                                   @RequestParam(name = "size", defaultValue = "10") @Min(1) int size) throws RuntimeException {
+        return bookingService.checkInputStateAndGetForBookingUserByState(stateStr, user, from, size);
     }
 }

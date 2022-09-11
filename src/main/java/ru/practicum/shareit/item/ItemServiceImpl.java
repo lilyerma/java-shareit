@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
@@ -12,7 +14,9 @@ import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.requests.ItemRequestRepository;
 import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.util.OffsetBasedPageRequest;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -31,12 +35,16 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
 
     @Transactional
     @Override
     public ItemDto create(ItemDto itemDto, long ownerId) {
         checkUserExists(ownerId);
+        if (itemDto.getRequestId() != null) {
+            checkItemRequestExists(itemDto.getRequestId());
+        }
         Item item = ItemMapper.fromItemDto(itemDto);
         item.setOwner(ownerId);
         Item itemToReturn = itemRepository.save(item);
@@ -74,6 +82,10 @@ public class ItemServiceImpl implements ItemService {
             if (item.getAvailable() != null) {
                 existItem.setAvailable(item.getAvailable());
             }
+            if (itemDto.getIdRequest() != null) {
+               checkItemRequestExists(itemDto.getIdRequest());
+               existItem.setRequestId(itemDto.getIdRequest());
+            }
             Item itemToReturn = itemRepository.save(existItem);
             return ItemMapper.toItemDto(itemToReturn);
         } catch (EntityNotFoundException e) {
@@ -103,8 +115,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getUserItems(long id) {
-        return itemRepository.findItemsByOwnerOrderByIdAsc(id)
+    public List<ItemDto> getUserItems(long id, int from, int size) {
+        if (size ==0){
+            return new ArrayList<>();
+        }
+        Pageable pageable = new OffsetBasedPageRequest(size,from, Sort.by(Sort.Direction.ASC,"id"));
+        return itemRepository.findItemsByOwner(id,pageable)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .map(this::addBookingDates)
@@ -152,11 +168,12 @@ public class ItemServiceImpl implements ItemService {
 
     //Ищем по имени и описанию
     @Override
-    public List<ItemDto> searchNameAndDesc(String text) {
+    public List<ItemDto> searchNameAndDesc(String text, int from, int size) {
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
-        return itemRepository.search(text)
+        Pageable pageable = new OffsetBasedPageRequest(size, from, Sort.by(Sort.DEFAULT_DIRECTION,"id"));
+        return itemRepository.search(text, text, pageable)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -236,5 +253,11 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
+    //Проверка, что запрос с таким номером есть
+    private void checkItemRequestExists(long requestId){
+        if (itemRequestRepository.findById(requestId).isEmpty()) {
+            throw new NotFoundException("Не найдена заявка");
+        }
+    }
 
 }

@@ -18,11 +18,7 @@ public interface BookingService {
 
     BookingDtoNames getById(long bookingId, long userId);
 
-    List<BookingDtoNames> getByState(long requestorId, State state);
+    List<BookingDtoNames> checkInputStateAndGetForOwnerByState(String stateStr, long ownerId, int from, int size);
 
-    List<BookingDtoNames> getForOwnerByState(long ownerId, State state);
-
-    List<BookingDtoNames> checkInputStateAndGetForOwnerByState(String stateStr, long ownerId);
-
-    List<BookingDtoNames> checkInputStateAndGetForBookingUserByState(String stateStr, long ownerId);
+    List<BookingDtoNames> checkInputStateAndGetForBookingUserByState(String stateStr, long ownerId, int from, int size);
 }

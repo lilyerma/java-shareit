@@ -6,18 +6,20 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-//Этот DTO для подставновки в BoookingDTO
 @Data
 @NoArgsConstructor
-public class ItemDtoShort {
+public class ItemDtoForRequest {
+
     long id;
     @NotNull
     @NotEmpty
     String name;
+    long owner;
 
-    public ItemDtoShort(long id, String name) {
+    public ItemDtoForRequest(long id, String name, long owner) {
         this.id = id;
         this.name = name;
+        this.owner = owner;
     }
 
 }
