@@ -3,7 +3,7 @@ package ru.practicum.shareit.requests.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.dto.ItemDtoForRequest;
+
 import ru.practicum.shareit.item.model.ItemView;
 
 import javax.validation.constraints.NotBlank;

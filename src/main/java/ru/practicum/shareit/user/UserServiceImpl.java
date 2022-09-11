@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+ //   private final UserMapper userMapper;
 
 
     @Transactional
@@ -27,12 +27,12 @@ public class UserServiceImpl implements UserService {
         if (userDto.getEmail() == null) {
             throw new ValidationException("нельзя чтобы был пустой email");
         }
-        User user = userMapper.fromUserDto(userDto);
+        User user = UserMapper.fromUserDto(userDto);
         User userToReturn = userRepository.save(user);
         return UserMapper.toUserDto(userToReturn);
     }
 
-    @Override
+
     public void checkId(Long id) {
         if (userRepository.findById(id).isEmpty()){
             throw new NotFoundException("нет пользователя");
@@ -42,9 +42,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto update(UserDto userDto, long id) {
-        if (userRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("Пользователь с таким Id не найден");
-        }
+        checkId(id);
         User existUser = userRepository.getReferenceById(id);
         if (userDto.getEmail()!=null){
             existUser.setEmail(userDto.getEmail());
@@ -58,9 +56,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delete(long id) {
+        checkId(id);
         User user = userRepository.getReferenceById(id);
         userRepository.delete(user);
-
     }
 
     @Override

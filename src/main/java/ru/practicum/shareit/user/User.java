@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,6 +30,7 @@ public class User {
 
     public User(){};
     public User(Long userId, String name, String email) {
+        this.id = userId;
         this.name = name;
         this.email = email;
     }

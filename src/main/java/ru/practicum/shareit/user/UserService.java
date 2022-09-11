@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
     UserDto create(UserDto userDto);
 
-    void checkId(Long id);
+  //  void checkId(Long id);
 
     UserDto update(UserDto userDto, long id);
 
@@ -19,5 +19,5 @@ public interface UserService {
 
   //  UserStorage getUserStorage();
 
-    UserMapper getUserMapper();
+//    UserMapper getUserMapper();
 }

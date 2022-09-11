@@ -143,8 +143,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addBookingDates(ItemDto itemDtoBooking) {
         long itemId = itemDtoBooking.getId();
-        ArrayList<Booking> bookings =
-                (ArrayList<Booking>) bookingRepository.findBookingByItemIdTwoNext(itemId,
+        List<Booking> bookings =
+                bookingRepository.findBookingByItemIdTwoNext(itemId,
                         LocalDateTime.now());
         if (bookings.size() == 2) {
             Booking bookingLast = bookings.get(0);
@@ -152,7 +152,7 @@ public class ItemServiceImpl implements ItemService {
             Booking bookingNext = bookings.get(1);
             itemDtoBooking.setNextBooking(BookingMapper.toBookingDtoFromBooking(bookingNext));
         } else if (bookings.size() == 1) {
-            ArrayList<Booking> bookingPast = (ArrayList<Booking>) bookingRepository.findBookingByItemIdTwoLast(itemId,
+            List<Booking> bookingPast = bookingRepository.findBookingByItemIdTwoLast(itemId,
                     LocalDateTime.now());
             if (bookingPast.size() > 0) {
                 itemDtoBooking.setLastBooking(BookingMapper
@@ -201,8 +201,8 @@ public class ItemServiceImpl implements ItemService {
 
     //Добавляем комментарии в DTO объекта и имя пользователя
     private void addComments(long itemId, ItemDto itemDto) {
-            ArrayList<Comment> commentsList = (ArrayList<Comment>) commentRepository.findCommentByItemId(itemId);
-            ArrayList<CommentDto> commentDtos = (ArrayList<CommentDto>) commentsList.stream()
+            List<Comment> commentsList = commentRepository.findCommentByItemId(itemId);
+            List<CommentDto> commentDtos = commentsList.stream()
                     .map(this::makeDTOAndSetName)
                     .collect(Collectors.toList());
             itemDto.setComments(commentDtos);
