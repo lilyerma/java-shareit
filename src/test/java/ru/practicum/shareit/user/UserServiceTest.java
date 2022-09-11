@@ -97,7 +97,7 @@ public class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
         Mockito.doNothing().when(userRepository).delete(any());
         userService.delete(1L);
-        verify(userRepository, times(2));
+        verify(userRepository, times(1)).delete(any());
     }
 
     @Test
@@ -128,7 +128,6 @@ public class UserServiceTest {
         Assert.assertTrue(userDto1 instanceof UserDto);
         Assert.assertEquals(1, userDto1.getId());
         Assert.assertEquals("some@email.com", userDto1.getEmail());
-        verify(userRepository, times(1));
     }
 
 }

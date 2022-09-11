@@ -3,7 +3,6 @@ package ru.practicum.shareit.item;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
@@ -35,6 +33,9 @@ public class ItemControllerTest {
 
     @Mock
     private ItemService itemService;
+
+    @Mock
+    private ItemRepository itemRepository;
 
     @InjectMocks
     private ItemController itemController;
@@ -73,10 +74,6 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.is(itemDto.getId()), Long.class));
     }
 
-    @Test
-    void delete() throws Exception {
-        Assertions.assertThrows(NotFoundException.class, () -> itemService.delete(1L,1L));
-    }
 
     @Test
     void update() throws Exception {

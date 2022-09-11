@@ -1,15 +1,11 @@
 package ru.practicum.shareit.requests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.web.servlet.View;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemView;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 
@@ -66,8 +62,6 @@ public class ItemRequestDtoTest {
         List<ItemView> itemResponse = Arrays.asList(itemView);
         itemRequestDto.setItems(itemResponse);
         JsonContent<ItemRequestDto> result = json.write(itemRequestDto);
-        ObjectMapper objectMapper = new ObjectMapper();
-  //      String jsonString = objectMapper.writeValueAsString(itemResponse);
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dtf = DateTimeFormatter.ISO_DATE_TIME;
