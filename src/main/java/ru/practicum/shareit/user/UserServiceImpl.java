@@ -45,7 +45,9 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto, long id) {
         checkId(id);
         User existUser = userRepository.getReferenceById(id);
-        existUser.setEmail(userDto.getEmail());
+        if (userDto.getEmail()!=null){
+            existUser.setEmail(userDto.getEmail());
+        }
         if (userDto.getName()!=null){
             existUser.setName(userDto.getName());
         }
