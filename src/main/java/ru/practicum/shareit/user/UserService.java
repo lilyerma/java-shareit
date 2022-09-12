@@ -9,6 +9,8 @@ public interface UserService {
 
   //  void checkId(Long id);
 
+    void checkId(Long id);
+
     UserDto update(UserDto userDto, long id);
 
     void delete(long id);

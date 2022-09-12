@@ -15,8 +15,7 @@ import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.ItemView;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.UserService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemRequestServiceImplTest {
@@ -36,8 +35,11 @@ public class ItemRequestServiceImplTest {
     @Mock
     private ItemRepository itemRepository;
 
+//    @Mock
+//    private UserRepository userRepository;
+
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @InjectMocks
     private ItemRequestServiceImpl service;
@@ -116,7 +118,8 @@ public class ItemRequestServiceImplTest {
     @Test
     void getRequestByID() {
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
+        doNothing().when(userService).checkId(1L);
+        doThrow(NotFoundException.class).when(userService).checkId(2L);
         when(itemRequestRepository.findById(2L)).thenReturn(Optional.of(new ItemRequest()));
         when(itemRequestRepository.getReferenceById(anyLong())).thenReturn(itemRequest1);
         when(itemRepository.findProjectionsByRequestId(anyLong())).thenReturn(Arrays.asList(itemView1, itemView2));
@@ -129,7 +132,8 @@ public class ItemRequestServiceImplTest {
     void getRequestListByPages() {
         List<ItemRequest> itemRequests = Arrays.asList(itemRequest1, itemRequest2);
         Page<ItemRequest> pagedResponse = new PageImpl(itemRequests);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
+        doNothing().when(userService).checkId(1L);
+        doThrow(NotFoundException.class).when(userService).checkId(12L);
         when(itemRequestRepository.findAll((Pageable) any())).thenReturn(pagedResponse);
         when(itemRepository.findProjectionsByRequestId(anyLong())).thenReturn(Arrays.asList(itemView2, itemView1));
         assertEquals(1, service.getRequestListByPages(1L, 1, 10).size());
@@ -138,7 +142,8 @@ public class ItemRequestServiceImplTest {
 
     @Test
     void getRequestListByRequestor() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
+        doNothing().when(userService).checkId(1L);
+        doThrow(NotFoundException.class).when(userService).checkId(2L);
         when(itemRequestRepository.getItemRequestByRequestorOrderByCreatedDesc(1L)).thenReturn(Arrays.asList(itemRequest1, itemRequest2));
         when(itemRepository.findProjectionsByRequestId(anyLong())).thenReturn(Arrays.asList(itemView2, itemView1));
         assertEquals(2, service.getRequestListByRequestor(1L).size());
@@ -152,7 +157,7 @@ public class ItemRequestServiceImplTest {
         itemRequestDto.setRequestorId(1L);
         itemRequestDto.setId(1L);
         itemRequestDto.setDescription("need screw");
-        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
+        doNothing().when(userService).checkId(1L);
         when(itemRequestRepository.save(any())).thenReturn(itemRequest1);
         assertTrue(service.create(itemRequestDto, 1L) instanceof ItemRequestDto);
         assertEquals("need screw", service.create(itemRequestDto, 1L).getDescription());

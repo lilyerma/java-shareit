@@ -11,7 +11,7 @@ import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.ItemView;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.util.OffsetBasedPageRequest;
 
 import java.util.List;
@@ -26,13 +26,11 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestRepository itemRequestRepository;
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public ItemRequestDto getRequestByID(Long userId, long requestId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new NotFoundException("Пользователь не найден");
-        }
+        userService.checkId(userId);
         if (itemRequestRepository.findById(requestId).isEmpty()) {
             throw new NotFoundException("Не найдена такая заявка");
         }
@@ -42,9 +40,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDto> getRequestListByPages(Long userId, int from, int size) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new NotFoundException("Пользователь не найден");
-        }
+        userService.checkId(userId);
         Pageable page = new OffsetBasedPageRequest(size,from,Sort.by(Sort.Direction.DESC, "created"));
 
         return itemRequestRepository.findAll(page).getContent().stream()
@@ -55,10 +51,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDto> getRequestListByRequestor(Long requestorId) {
-        if (userRepository.findById(requestorId).isEmpty()) {
-            throw new NotFoundException("Пользователь не найден");
-        }
-
+        userService.checkId(requestorId);
         return itemRequestRepository.getItemRequestByRequestorOrderByCreatedDesc(requestorId).stream()
                 .map(this::itemRequestDtoWithResponse)
                 .collect(Collectors.toList());
@@ -67,9 +60,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Transactional
     @Override
     public ItemRequestDto create(ItemRequestDto itemRequestDto, Long requestorId) {
-        if (userRepository.findById(requestorId).isEmpty()) {
-            throw new NotFoundException("Пользователь не найден");
-        }
+        userService.checkId(requestorId);
         ItemRequest itemRequest = ItemRequestMapper.fromItemRequestDto(itemRequestDto, requestorId);
         ItemRequest newRequest = itemRequestRepository.save(itemRequest);
         return ItemRequestMapper.toItemRequestDto(newRequest);

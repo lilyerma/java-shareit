@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
     public void checkId(Long id) {
         if (userRepository.findById(id).isEmpty()){
             throw new NotFoundException("нет пользователя");
@@ -44,9 +45,7 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto, long id) {
         checkId(id);
         User existUser = userRepository.getReferenceById(id);
-        if (userDto.getEmail()!=null){
-            existUser.setEmail(userDto.getEmail());
-        }
+        existUser.setEmail(userDto.getEmail());
         if (userDto.getName()!=null){
             existUser.setName(userDto.getName());
         }
