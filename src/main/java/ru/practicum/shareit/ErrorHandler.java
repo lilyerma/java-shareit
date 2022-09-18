@@ -2,18 +2,23 @@ package ru.practicum.shareit;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.shareit.exception.ArgumentException;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @RestControllerAdvice
+@Component
 public class ErrorHandler {
 
     @ExceptionHandler(ArgumentException.class)
@@ -21,6 +26,14 @@ public class ErrorHandler {
         Map<String,String> resp = new HashMap<>();
         resp.put("error", ex.getMessage());
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
+
+    // 400 — если ошибка валидации: ConstraintViolationException
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handlePathVariable(ConstraintViolationException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     // 400 — если ошибка валидации: ValidationException

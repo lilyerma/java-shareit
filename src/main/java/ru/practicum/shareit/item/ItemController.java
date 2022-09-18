@@ -1,18 +1,21 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
 
     private final ItemService itemService;
@@ -38,19 +41,26 @@ public class ItemController {
 
     // Метод по получению всех объектов пользователя
     @GetMapping
-    public List<ItemDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) throws RuntimeException {
-        return itemService.getUserItems(ownerId);
+    public List<ItemDto> getUserItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+                                      @RequestParam(name = "from", defaultValue = "0") @Min(0) int from,
+                                      @RequestParam(name = "size", defaultValue = "10") @Min(1) int size)
+            throws RuntimeException {
+        return itemService.getUserItems(ownerId, from, size);
     }
 
     // Метод по получению одного объекта
     @GetMapping("/{id}")
-    public ItemDto getOne(@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable long id) throws RuntimeException {
+    public ItemDto getOne(@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable long id)
+            throws RuntimeException {
         return itemService.getItemByIdForOwnerOrForUser(id,ownerId); // Возвращает пользователям с отзывами
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchNameAndDesc(@RequestParam String text) throws RuntimeException {
-        return itemService.searchNameAndDesc(text);
+    public List<ItemDto> searchNameAndDesc(@RequestParam String text,
+                                           @RequestParam(name = "from", defaultValue = "0") @Min(0) int from,
+                                           @RequestParam(name = "size", defaultValue = "10") @Min(1) int size)
+            throws RuntimeException {
+        return itemService.searchNameAndDesc(text, from, size);
     }
 
     // Метод для добавления комментариев

@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,11 +26,10 @@ public class Item {
     long owner;
 
     @Column(name = "request_id")
-    long request;
+    Long requestId;
 
     public Item() {
     }
-
     public Item(String name, String description, Boolean available) {
         this.name = name;
         this.description = description;
