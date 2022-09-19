@@ -1,6 +1,7 @@
 package ru.practicum.shareit.itemRequest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,10 @@ import javax.validation.constraints.Min;
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
+@Slf4j
 @Validated
 public class ItemRequestController {
 
-  //  private final ItemRequestService itemRequestService;
    private final ItemRequestClient itemRequestClient;
 
     // Метод, который добавляет новый запрос
@@ -24,13 +25,14 @@ public class ItemRequestController {
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") Long requestorId,
                                  @Valid @RequestBody ItemRequestDto itemRequestDto)
             throws RuntimeException {
+        log.debug("Passed params to create requestorId " + requestorId);
         return itemRequestClient.create(requestorId,itemRequestDto);
     }
 
     // Метод, который возвращает свои запросы и ответы на них
     @GetMapping
-    public ResponseEntity<Object> getRequestList(@RequestHeader("X-Sharer-User-Id") Long requestorId)
-            throws RuntimeException {
+    public ResponseEntity<Object> getRequestList(@RequestHeader("X-Sharer-User-Id") Long requestorId) {
+        log.debug("Passed params to get requests for user requestorId " + requestorId);
         return itemRequestClient.getRequestListByRequestor(requestorId);
     }
 
@@ -38,16 +40,16 @@ public class ItemRequestController {
     @GetMapping("/all")
     public ResponseEntity<Object> getRequestListByPages(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                       @RequestParam (name="from", defaultValue = "0") @Min(0) int from,
-                                                      @RequestParam (name="size", defaultValue = "10") @Min(1) int size)
-            throws RuntimeException {
+                                                      @RequestParam (name="size", defaultValue = "10") @Min(1) int size) {
+        log.debug("Passed params to get requests userId " + userId + " from " +from  + " size " + size);
         return itemRequestClient.getRequestListByPages(userId, from, size);
     }
 
     // Пользователь получает инфо по конкретному запросу
     @GetMapping("{requestId}")
     public ResponseEntity<Object> getRequestById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                      @PathVariable long requestId)
-            throws RuntimeException {
+                                                      @PathVariable long requestId) {
+        log.debug("Passed params to get request userId " + userId + " requestId " + requestId);
         return itemRequestClient.getRequestByID(userId, requestId);
     }
 }

@@ -20,7 +20,7 @@ public class ItemRequestDto {
     @NotNull
     @NotBlank
     @Size(min =3, max = 350)
-    String description;
+    private String description;
 
     private long requestorId;
 
