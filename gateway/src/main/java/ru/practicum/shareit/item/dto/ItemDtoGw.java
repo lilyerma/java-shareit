@@ -15,19 +15,19 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemDtoGw {
 
-    private long id;
+    long id;
     @NotNull
     @NotEmpty
-    private String name;
+    String name;
     @NotNull
     @NotEmpty
-    private String description;
+    String description;
     @NotNull
-    private Boolean available;
-    private Long requestId;
-    private BookingDtoGw lastBooking;
-    private BookingDtoGw nextBooking;
-    private List<CommentDtoGw> comments;
+    Boolean available;
+    Long requestId;
+    BookingDtoGw lastBooking;
+    BookingDtoGw nextBooking;
+    List<CommentDtoGw> comments;
 
     public ItemDtoGw(String name, String description, Boolean available) {
         this.name = name;

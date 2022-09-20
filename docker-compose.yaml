@@ -29,6 +29,7 @@ services:
     ports:
       - "6541:5432"
     environment:
+      - TZ=Europe/Belfast
       - POSTGRES_DB=shareit
       - POSTGRES_USER=sharit
       - POSTGRES_PASSWORD=sharit

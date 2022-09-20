@@ -23,16 +23,18 @@ public class BookingController {
     @ResponseBody
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") Long requestorId,
-                                         @Valid @RequestBody BookingDtoGw bookingDtoGw) {
-        log.debug("Passed to create method: requestorId " + requestorId);
+                                         @Valid @RequestBody BookingDtoGw bookingDtoGw)
+            throws RuntimeException {
         return bookingClient.create(requestorId, bookingDtoGw);
     }
 
     @ResponseBody
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> update(@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable long bookingId,
-                                  @RequestParam(name = "approved") Boolean approved) {
-        log.debug("Passed to update method params: owner"+ ownerId +" bookingId "+ bookingId);
+                                  @RequestParam(name = "approved") Boolean approved)
+            throws RuntimeException {
+        log.debug("переданы параметры, владелец"+ ownerId +" номер бронирования "+ bookingId);
+        log.info("переданы параметры, владелец"+ ownerId +" номер бронирования "+ bookingId);
         return bookingClient.updateStatus(bookingId, approved, ownerId);
     }
 
@@ -42,16 +44,16 @@ public class BookingController {
     public ResponseEntity<Object> getUserItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                                               @RequestParam(name = "state", defaultValue = "ALL") String stateStr,
                                               @Valid @RequestParam(name = "from", defaultValue = "0") @Min(0) int from,
-                                              @Valid @RequestParam(name = "size", defaultValue = "10") @Min(1) int size) {
-        log.debug("Passed to /owner get method params: ownerId " + ownerId + " state" + stateStr + " from " + from + " size " + size);
+                                              @Valid @RequestParam(name = "size", defaultValue = "10") @Min(1) int size)
+            throws RuntimeException {
         return bookingClient.checkInputStateAndGetForOwnerByState(ownerId,stateStr,from, size);
     }
 
     // Метод по получению одного объекта
     @ResponseBody
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> getOne(@RequestHeader("X-Sharer-User-Id") Long user, @PathVariable long bookingId) {
-        log.debug("Passed to get booking by user params: user" + user + "bookingId" + bookingId);
+    public ResponseEntity<Object> getOne(@RequestHeader("X-Sharer-User-Id") Long user, @PathVariable long bookingId)
+            throws RuntimeException {
         return bookingClient.getById(bookingId, user);
     }
 
@@ -62,9 +64,7 @@ public class BookingController {
                                                    @RequestParam(name = "state", defaultValue = "ALL")
                                                    String stateStr,
                                                    @RequestParam(name = "from", defaultValue = "0") @Min(0) int from,
-                                                   @RequestParam(name = "size", defaultValue = "10") @Min(1) int size)  {
-        log.debug("Passed to get bookings by user params: user " + user + " state" + stateStr +
-                " from " + from + " size " + size);
+                                                   @RequestParam(name = "size", defaultValue = "10") @Min(1) int size) throws RuntimeException {
         return bookingClient.checkInputStateAndGetForBookingUserByState(user, stateStr, from, size);
     }
 }

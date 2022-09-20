@@ -17,7 +17,7 @@ public class CommentDtoGw {
     @NotNull
     @NotBlank
     @Size(min =3, max = 350)
-    private String text;
+    String text;
     private String authorName;
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime created;

@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemUpdateDtoGw {
 
-    private long id;
-    private String name;
-    private String description;
-    private Boolean available;
-    private Long idRequest;
+    long id;
+    String name;
+    String description;
+    Boolean available;
+    Long idRequest;
 
 }
