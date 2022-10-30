@@ -44,11 +44,9 @@ public class BookingController {
     public BookingDtoNames getOne(@RequestHeader("X-Sharer-User-Id") Long user, @PathVariable long bookingId)
             throws RuntimeException {
         return bookingService.getById(bookingId, user);
-
     }
 
     // Пользователь получает по своим бронированиям и по состоянию
-
     @GetMapping
     public List<BookingDtoNames> getBookingsByUser(@RequestHeader("X-Sharer-User-Id") Long user,
                                                    @RequestParam(name = "state", defaultValue = "ALL")
