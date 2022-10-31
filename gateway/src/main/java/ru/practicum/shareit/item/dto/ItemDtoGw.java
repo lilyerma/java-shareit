@@ -18,16 +18,16 @@ public class ItemDtoGw {
     long id;
     @NotNull
     @NotEmpty
-    String name;
+    private String name;
     @NotNull
     @NotEmpty
-    String description;
+    private String description;
     @NotNull
-    Boolean available;
-    Long requestId;
-    BookingDtoGw lastBooking;
-    BookingDtoGw nextBooking;
-    List<CommentDtoGw> comments;
+    private Boolean available;
+    private Long requestId;
+    private BookingDtoGw lastBooking;
+    private BookingDtoGw nextBooking;
+    private List<CommentDtoGw> comments;
 
     public ItemDtoGw(String name, String description, Boolean available) {
         this.name = name;

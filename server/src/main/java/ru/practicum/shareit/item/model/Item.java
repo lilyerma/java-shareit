@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "items", schema = "public")
@@ -20,6 +21,7 @@ public class Item {
     String name;
     @Column(nullable = false)
     String description;
+    @NotNull
     @Column(name = "is_available", nullable = false)
     Boolean available;
     @Column(name = "owner_id",nullable = false)

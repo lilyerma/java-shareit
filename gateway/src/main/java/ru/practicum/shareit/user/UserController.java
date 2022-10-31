@@ -22,7 +22,7 @@ public class UserController {
     @ResponseBody
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody UserDto userDto) {
-        log.info("Получен POST-запрос к эндпоинту: '/users' на добавление пользователя");
+        log.debug("Получен POST-запрос к эндпоинту: '/users' на добавление пользователя");
         return userClient.create(userDto);
     }
 
@@ -30,24 +30,28 @@ public class UserController {
     @ResponseBody
     @PatchMapping ("/{id}")
     public ResponseEntity<Object> update(@PathVariable long id, @RequestBody UserDto userDto) {
+        log.debug("Patch request to update user " + id);
         return userClient.update(id, userDto);
     }
 
     // Метод удаляющий пользователя
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable long id) {
+        log.debug("Delete request to delete user " + id);
         return userClient.delete(id);
     }
 
     // Метод по получению всех пользователей
     @GetMapping
     public ResponseEntity<Object> getUsers() {
+        log.debug("Get requests for all users");
         return userClient.getUsers();
     }
 
     // Метод по получению одного пользователя (переменная пути)
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOne(@PathVariable long id) {
+        log.debug("et request for one user " + id);
         return userClient.getUserById(id);
     }
 

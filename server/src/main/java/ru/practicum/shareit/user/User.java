@@ -19,14 +19,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
     @Column(nullable = false)
-    String name;
+    private String name;
     @Email
     @NotNull(message = "Не должно быть null")
     @NotBlank(message = "Не должно быть пустым")
     @Column(unique = true,nullable = false)
-    String email;
+    private String email;
 
     public User(){};
     public User(Long userId, String name, String email) {

@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemUpdateDto {
 
-    long id;
-    String name;
-    String description;
-    Boolean available;
-    Long idRequest;
+    private long id;
+    private String name;
+    private String description;
+    private Boolean available;
+    private Long idRequest;
 
     public ItemUpdateDto(String name, String description, Boolean available, Long idRequest) {
         this.name = name;

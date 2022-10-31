@@ -10,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 public class ItemDtoShort {
-    long id;
+    private long id;
     @NotNull
     @NotEmpty
-    String name;
+    private String name;
 
     public ItemDtoShort(long id, String name) {
         this.id = id;

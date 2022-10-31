@@ -50,6 +50,9 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingDtoNames create(BookingDto bookingDto, long requestorId) {
         checkNotOwnerAndAvailable(bookingDto, requestorId);
+        if (bookingDto.getStart().isAfter(bookingDto.getEnd())){
+            throw new ValidationException("Beginig should be before end");
+        }
         Booking booking = BookingMapper.fromBookingDto(bookingDto);
         booking.setBooker(requestorId);
         booking.setStatus(Status.WAITING);

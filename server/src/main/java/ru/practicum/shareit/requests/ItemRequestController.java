@@ -9,7 +9,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
-
 public class ItemRequestController {
 
     private final ItemRequestService itemRequestService;

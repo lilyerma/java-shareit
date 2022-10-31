@@ -17,13 +17,13 @@ public class ItemRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @Column
-    String description;
+    private String description;
 
     @Column(name = "requestor_id")
-    long requestor;
+    private long requestor;
 
     @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")

@@ -52,7 +52,7 @@ public class InMemoryUserStorage implements UserStorage {
             log.debug("При обновлении пользователя передали значение Null");
             throw new ValidationException("Ошибка валидации");
         }
-        if (getUserByEmail(user.email) != -1) {
+        if (getUserByEmail(user.getEmail()) != -1) {
             throw new ConflictException("Пользователь с таким email уже есть");
         }
         if (mapWithAllUsers.get(user.getId()) == null) {
@@ -65,7 +65,7 @@ public class InMemoryUserStorage implements UserStorage {
                 if (user.getName() == null) {
                     user.setName(userExist.getName());
                 } else if (user.getEmail() == null) {
-                    user.setEmail(userExist.email);
+                    user.setEmail(userExist.getEmail());
                 }
                 mapWithAllUsers.put(user.getId(), user);
                 return mapWithAllUsers.get(user.getId());
